@@ -1,0 +1,695 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Casual Lecturer Hiring Process</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        .header {
+            text-align: center;
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            margin-bottom: 30px;
+        }
+        
+        .header h1 {
+            color: #2c3e50;
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+        
+        .header p {
+            color: #7f8c8d;
+            font-size: 1.2em;
+        }
+        
+        .view-toggle {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+        
+        .toggle-btn {
+            padding: 12px 24px;
+            background: white;
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+        
+        .toggle-btn.active {
+            background: #3498db;
+            color: white;
+            transform: translateY(-2px);
+        }
+        
+        .view-section {
+            display: none;
+            animation: fadeIn 0.5s ease-in;
+        }
+        
+        .view-section.active {
+            display: block;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        /* Process Flow Styles */
+        .process-flow {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+        
+        .step-card {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+            position: relative;
+            transition: transform 0.3s ease;
+        }
+        
+        .step-card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .step-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+        
+        .step-number {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #3498db, #2980b9);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 1.2em;
+            margin-right: 20px;
+        }
+        
+        .step-title {
+            font-size: 1.4em;
+            font-weight: bold;
+            color: #2c3e50;
+        }
+        
+        .step-responsible {
+            background: #e8f4fd;
+            color: #2980b9;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 0.9em;
+            font-weight: bold;
+            margin-left: auto;
+        }
+        
+        .step-content {
+            margin-left: 70px;
+        }
+        
+        .step-actions {
+            margin-bottom: 15px;
+        }
+        
+        .step-actions ul {
+            list-style: none;
+            padding-left: 0;
+        }
+        
+        .step-actions li {
+            padding: 8px 0;
+            border-left: 3px solid #3498db;
+            padding-left: 15px;
+            margin-bottom: 8px;
+            background: #f8f9fa;
+            border-radius: 0 8px 8px 0;
+        }
+        
+        .step-output {
+            background: #d5f4e6;
+            border-left: 4px solid #27ae60;
+            padding: 15px;
+            border-radius: 8px;
+            font-weight: bold;
+            color: #27ae60;
+        }
+        
+        /* Swimlane Styles */
+        .swimlane {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+        }
+        
+        .swimlane-header {
+            display: grid;
+            grid-template-columns: 200px repeat(4, 1fr);
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+        
+        .role-header {
+            background: #34495e;
+            color: white;
+            padding: 15px;
+            border-radius: 10px;
+            text-align: center;
+            font-weight: bold;
+        }
+        
+        .swimlane-row {
+            display: grid;
+            grid-template-columns: 200px repeat(4, 1fr);
+            gap: 15px;
+            margin-bottom: 15px;
+        }
+        
+        .step-label {
+            background: #3498db;
+            color: white;
+            padding: 15px;
+            border-radius: 10px;
+            text-align: center;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .activity-box {
+            background: #ecf0f1;
+            padding: 15px;
+            border-radius: 10px;
+            min-height: 80px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            font-size: 0.9em;
+            transition: background 0.3s ease;
+        }
+        
+        .activity-box.active {
+            background: #3498db;
+            color: white;
+            font-weight: bold;
+        }
+        
+        /* Timeline Styles */
+        .timeline {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+        }
+        
+        .timeline-item {
+            display: flex;
+            margin-bottom: 30px;
+            position: relative;
+        }
+        
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            left: 25px;
+            top: 50px;
+            width: 2px;
+            height: calc(100% + 30px);
+            background: #bdc3c7;
+        }
+        
+        .timeline-item:last-child::before {
+            display: none;
+        }
+        
+        .timeline-dot {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #e74c3c, #c0392b);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            margin-right: 20px;
+            z-index: 2;
+            position: relative;
+        }
+        
+        .timeline-content {
+            flex: 1;
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 10px;
+            border-left: 4px solid #e74c3c;
+        }
+        
+        .timeline-title {
+            font-size: 1.3em;
+            font-weight: bold;
+            color: #2c3e50;
+            margin-bottom: 10px;
+        }
+        
+        .timeline-duration {
+            background: #e8f4fd;
+            color: #2980b9;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 0.9em;
+            display: inline-block;
+            margin-bottom: 15px;
+        }
+        
+        /* Dashboard Styles */
+        .dashboard {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+        }
+        
+        .dashboard-card {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+            text-align: center;
+        }
+        
+        .dashboard-icon {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #f39c12, #e67e22);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 20px;
+            font-size: 2em;
+            color: white;
+        }
+        
+        .dashboard-title {
+            font-size: 1.3em;
+            font-weight: bold;
+            color: #2c3e50;
+            margin-bottom: 10px;
+        }
+        
+        .dashboard-value {
+            font-size: 2.5em;
+            font-weight: bold;
+            color: #3498db;
+            margin-bottom: 10px;
+        }
+        
+        .dashboard-desc {
+            color: #7f8c8d;
+        }
+        
+        @media (max-width: 768px) {
+            .swimlane-header,
+            .swimlane-row {
+                grid-template-columns: 1fr;
+            }
+            
+            .timeline-item {
+                flex-direction: column;
+            }
+            
+            .timeline-dot {
+                margin-bottom: 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🎓 Casual Lecturer Hiring Process</h1>
+            <p>Complete visual guide from interview to IT setup</p>
+        </div>
+        
+        <div class="view-toggle">
+            <button class="toggle-btn active" onclick="showView('flow')">📋 Process Flow</button>
+            <button class="toggle-btn" onclick="showView('swimlane')">🏊 Swimlane</button>
+            <button class="toggle-btn" onclick="showView('timeline')">⏱️ Timeline</button>
+            <button class="toggle-btn" onclick="showView('dashboard')">📊 Dashboard</button>
+        </div>
+        
+        <!-- Process Flow View -->
+        <div id="flow" class="view-section active">
+            <div class="process-flow">
+                <div class="step-card">
+                    <div class="step-header">
+                        <div class="step-number">1</div>
+                        <div class="step-title">Lecturer Recruitment Decision</div>
+                        <div class="step-responsible">HOP</div>
+                    </div>
+                    <div class="step-content">
+                        <div class="step-actions">
+                            <ul>
+                                <li>HOP interviews with the prospective lecturer</li>
+                                <li>HOP evaluates the candidate and decides to recruit the lecturer</li>
+                            </ul>
+                        </div>
+                        <div class="step-output">✅ Output: Approved lecturer for onboarding</div>
+                    </div>
+                </div>
+                
+                <div class="step-card">
+                    <div class="step-header">
+                        <div class="step-number">2</div>
+                        <div class="step-title">Payroll Account Setup</div>
+                        <div class="step-responsible">HOP + Lecturer + Payroll</div>
+                    </div>
+                    <div class="step-content">
+                        <div class="step-actions">
+                            <ul>
+                                <li>HOP contacts payroll department to initiate account setup</li>
+                                <li>Lecturer submits required documents (ID, tax forms, bank details)</li>
+                                <li>Payroll processes documents and assigns unique staff ID</li>
+                            </ul>
+                        </div>
+                        <div class="step-output">✅ Output: Staff ID assigned and communicated to HOP</div>
+                    </div>
+                </div>
+                
+                <div class="step-card">
+                    <div class="step-header">
+                        <div class="step-number">3</div>
+                        <div class="step-title">IT Registration Form Request</div>
+                        <div class="step-responsible">HOP</div>
+                    </div>
+                    <div class="step-content">
+                        <div class="step-actions">
+                            <ul>
+                                <li>HOP confirms receipt of Staff ID from payroll</li>
+                                <li>HOP requests IT registration form link from IT department</li>
+                            </ul>
+                        </div>
+                        <div class="step-output">✅ Output: IT registration form link provided to HOP</div>
+                    </div>
+                </div>
+                
+                <div class="step-card">
+                    <div class="step-header">
+                        <div class="step-number">4</div>
+                        <div class="step-title">IT Registration Form Submission</div>
+                        <div class="step-responsible">HOP</div>
+                    </div>
+                    <div class="step-content">
+                        <div class="step-actions">
+                            <ul>
+                                <li>HOP completes IT registration form with lecturer details</li>
+                                <li>Includes: Name, Staff ID, position, department, start date, access requirements</li>
+                                <li>HOP submits completed form to IT department</li>
+                            </ul>
+                        </div>
+                        <div class="step-output">✅ Output: Completed IT registration form submitted</div>
+                    </div>
+                </div>
+                
+                <div class="step-card">
+                    <div class="step-header">
+                        <div class="step-number">5</div>
+                        <div class="step-title">IT Account Creation</div>
+                        <div class="step-responsible">IT Department</div>
+                    </div>
+                    <div class="step-content">
+                        <div class="step-actions">
+                            <ul>
+                                <li>IT creates university email account</li>
+                                <li>Sets up Learning Management System (LMS) access</li>
+                                <li>Configures network access credentials</li>
+                                <li>Enables library system access and other permissions</li>
+                            </ul>
+                        </div>
+                        <div class="step-output">✅ Output: Complete IT account setup for lecturer</div>
+                    </div>
+                </div>
+                
+                <div class="step-card">
+                    <div class="step-header">
+                        <div class="step-number">6</div>
+                        <div class="step-title">Notification of Account Creation</div>
+                        <div class="step-responsible">IT Department</div>
+                    </div>
+                    <div class="step-content">
+                        <div class="step-actions">
+                            <ul>
+                                <li>IT sends confirmation email to HOP and new lecturer</li>
+                                <li>Includes login credentials and access instructions</li>
+                                <li>CC: Effendy, Library Team, Caitlin, KOI IT Support</li>
+                            </ul>
+                        </div>
+                        <div class="step-output">✅ Output: All stakeholders notified of new lecturer's IT account setup</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Swimlane View -->
+        <div id="swimlane" class="view-section">
+            <div class="swimlane">
+                <div class="swimlane-header">
+                    <div class="role-header">Steps</div>
+                    <div class="role-header">HOP</div>
+                    <div class="role-header">Lecturer</div>
+                    <div class="role-header">Payroll</div>
+                    <div class="role-header">IT Department</div>
+                </div>
+                
+                <div class="swimlane-row">
+                    <div class="step-label">Step 1<br>Interview</div>
+                    <div class="activity-box active">Conducts interview<br>Makes recruitment decision</div>
+                    <div class="activity-box">Participates in interview</div>
+                    <div class="activity-box">-</div>
+                    <div class="activity-box">-</div>
+                </div>
+                
+                <div class="swimlane-row">
+                    <div class="step-label">Step 2<br>Payroll Setup</div>
+                    <div class="activity-box active">Contacts payroll department</div>
+                    <div class="activity-box active">Submits required documents</div>
+                    <div class="activity-box active">Processes documents<br>Assigns Staff ID</div>
+                    <div class="activity-box">-</div>
+                </div>
+                
+                <div class="swimlane-row">
+                    <div class="step-label">Step 3<br>IT Form Request</div>
+                    <div class="activity-box active">Requests IT registration form link</div>
+                    <div class="activity-box">-</div>
+                    <div class="activity-box">-</div>
+                    <div class="activity-box active">Provides form link</div>
+                </div>
+                
+                <div class="swimlane-row">
+                    <div class="step-label">Step 4<br>Form Submission</div>
+                    <div class="activity-box active">Completes and submits IT form</div>
+                    <div class="activity-box">-</div>
+                    <div class="activity-box">-</div>
+                    <div class="activity-box">Receives form</div>
+                </div>
+                
+                <div class="swimlane-row">
+                    <div class="step-label">Step 5<br>Account Creation</div>
+                    <div class="activity-box">-</div>
+                    <div class="activity-box">-</div>
+                    <div class="activity-box">-</div>
+                    <div class="activity-box active">Creates all IT accounts<br>Tests access</div>
+                </div>
+                
+                <div class="swimlane-row">
+                    <div class="step-label">Step 6<br>Notification</div>
+                    <div class="activity-box">Receives notification</div>
+                    <div class="activity-box">Receives credentials</div>
+                    <div class="activity-box">-</div>
+                    <div class="activity-box active">Sends notification email<br>to all stakeholders</div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Timeline View -->
+        <div id="timeline" class="view-section">
+            <div class="timeline">
+                <div class="timeline-item">
+                    <div class="timeline-dot">1</div>
+                    <div class="timeline-content">
+                        <div class="timeline-title">Interview & Decision</div>
+                        <div class="timeline-duration">Day 1</div>
+                        <p>HOP conducts interview with prospective lecturer and makes recruitment decision. This is the starting point of the entire onboarding process.</p>
+                    </div>
+                </div>
+                
+                <div class="timeline-item">
+                    <div class="timeline-dot">2</div>
+                    <div class="timeline-content">
+                        <div class="timeline-title">Payroll Account Setup</div>
+                        <div class="timeline-duration">Days 2-5</div>
+                        <p>HOP initiates payroll setup, lecturer submits required documents, and payroll processes everything to assign a unique Staff ID.</p>
+                    </div>
+                </div>
+                
+                <div class="timeline-item">
+                    <div class="timeline-dot">3</div>
+                    <div class="timeline-content">
+                        <div class="timeline-title">IT Form Request</div>
+                        <div class="timeline-duration">Day 6</div>
+                        <p>HOP receives Staff ID confirmation and requests the IT registration form link from the IT department.</p>
+                    </div>
+                </div>
+                
+                <div class="timeline-item">
+                    <div class="timeline-dot">4</div>
+                    <div class="timeline-content">
+                        <div class="timeline-title">Form Submission</div>
+                        <div class="timeline-duration">Days 6-7</div>
+                        <p>HOP completes the comprehensive IT registration form with all lecturer details and submits it to IT department.</p>
+                    </div>
+                </div>
+                
+                <div class="timeline-item">
+                    <div class="timeline-dot">5</div>
+                    <div class="timeline-content">
+                        <div class="timeline-title">IT Account Creation</div>
+                        <div class="timeline-duration">Days 8-10</div>
+                        <p>IT department creates all necessary accounts: email, LMS access, network credentials, and library system permissions.</p>
+                    </div>
+                </div>
+                
+                <div class="timeline-item">
+                    <div class="timeline-dot">6</div>
+                    <div class="timeline-content">
+                        <div class="timeline-title">Notification Complete</div>
+                        <div class="timeline-duration">Day 10</div>
+                        <p>IT sends comprehensive notification email with credentials and instructions to all stakeholders. Process complete!</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Dashboard View -->
+        <div id="dashboard" class="view-section">
+            <div class="dashboard">
+                <div class="dashboard-card">
+                    <div class="dashboard-icon">⏱️</div>
+                    <div class="dashboard-title">Total Process Time</div>
+                    <div class="dashboard-value">10</div>
+                    <div class="dashboard-desc">Business Days</div>
+                </div>
+                
+                <div class="dashboard-card">
+                    <div class="dashboard-icon">👥</div>
+                    <div class="dashboard-title">Key Stakeholders</div>
+                    <div class="dashboard-value">7</div>
+                    <div class="dashboard-desc">People Involved</div>
+                </div>
+                
+                <div class="dashboard-card">
+                    <div class="dashboard-icon">📋</div>
+                    <div class="dashboard-title">Process Steps</div>
+                    <div class="dashboard-value">6</div>
+                    <div class="dashboard-desc">Sequential Steps</div>
+                </div>
+                
+                <div class="dashboard-card">
+                    <div class="dashboard-icon">🎯</div>
+                    <div class="dashboard-title">Accuracy Target</div>
+                    <div class="dashboard-value">95%</div>
+                    <div class="dashboard-desc">Error-free Rate</div>
+                </div>
+                
+                <div class="dashboard-card">
+                    <div class="dashboard-icon">🔧</div>
+                    <div class="dashboard-title">IT Accounts Created</div>
+                    <div class="dashboard-value">4+</div>
+                    <div class="dashboard-desc">System Access Points</div>
+                </div>
+                
+                <div class="dashboard-card">
+                    <div class="dashboard-icon">📧</div>
+                    <div class="dashboard-title">Final Notification</div>
+                    <div class="dashboard-value">6</div>
+                    <div class="dashboard-desc">Email Recipients</div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        function showView(viewName) {
+            // Hide all views
+            const views = document.querySelectorAll('.view-section');
+            views.forEach(view => {
+                view.classList.remove('active');
+            });
+            
+            // Remove active class from all buttons
+            const buttons = document.querySelectorAll('.toggle-btn');
+            buttons.forEach(btn => {
+                btn.classList.remove('active');
+            });
+            
+            // Show selected view
+            document.getElementById(viewName).classList.add('active');
+            
+            // Add active class to clicked button
+            event.target.classList.add('active');
+        }
+        
+        // Add some interactivity to process flow cards
+        document.addEventListener('DOMContentLoaded', function() {
+            const stepCards = document.querySelectorAll('.step-card');
+            stepCards.forEach((card, index) => {
+                card.addEventListener('click', function() {
+                    // Add a pulse effect
+                    this.style.transform = 'scale(1.02)';
+                    setTimeout(() => {
+                        this.style.transform = '';
+                    }, 200);
+                });
+            });
+        });
+    </script>
+</body>
+</html>
